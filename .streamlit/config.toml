@@ -1,3 +1,15 @@
+
 [server]
-maxUploadSize = 2000 # Sets limit to 2GB
+maxUploadSize = 2000
 runOnSave = true
+
+[theme]
+primaryColor = "#18181b"        # Zinc-900 (Deep Black for active states)
+backgroundColor = "#ffffff"     # White
+secondaryBackgroundColor = "#f4f4f5" # Zinc-100 (Sidebar grey)
+textColor = "#09090b"           # Zinc-950 (High contrast text)
+font = "sans serif"             # Matches Inter/Modern look
+base = "light"
+
+[ui]
+hideTopBar = false              # Keep true/false based on preference

@@ -1,5 +1,3 @@
-
-
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -48,8 +46,16 @@ else:
 # Calculate metrics based on the FILTERED data
 stats = math_utils.calculate_key_metrics(df)
 
-# ---  FORMAT STATS FOR BETTER AI TEXT ---
+# --- 🛑 CRASH FIX: CHECK FOR MISSING NUMBERS ---
+if stats is None:
+    st.error("⚠️ No numeric data found in this file.")
+    st.info("This portal requires numeric columns (like 'Sales', 'Profit', or 'Price') to generate insights.")
+    st.markdown("**Your file looks like this (Text Only):**")
+    st.dataframe(df.head(), use_container_width=True)
+    st.stop()  # <--- STOP HERE so it doesn't crash below
+# -----------------------------------------------
 
+# ---  FORMAT STATS FOR BETTER AI TEXT ---
 formatted_stats = {
     "Total Revenue": f"${stats['total_value']:,.2f}",
     "Average Ticket": f"${stats['average_value']:,.2f}",
