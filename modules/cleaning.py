@@ -12,7 +12,7 @@ def perform_advanced_cleaning(uploaded_file):
     processor = DataProcessor()
     
     # Load and Clean
-    # (save the uploaded file temporarily because her code expects a path)
+    # (save the uploaded file temporarily because code expects a path)
     temp_path = "temp_upload.csv"
     with open(temp_path, "wb") as f:
         f.write(uploaded_file.getbuffer())
