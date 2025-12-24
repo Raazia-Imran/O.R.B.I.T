@@ -5,5 +5,5 @@ python-dotenv
 supabase
 plotly
 openpyxl
-matplotlib.pylot
+matplotlib
 seaborn
