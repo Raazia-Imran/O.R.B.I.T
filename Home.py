@@ -1,6 +1,10 @@
 import streamlit as st
 import pandas as pd
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
+api_key = os.getenv("HF_API_TOKEN")
 
 # 1. Global Page Config
 st.set_page_config(
