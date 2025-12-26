@@ -185,13 +185,13 @@ st.divider()
 st.markdown("### 🛠️ Advanced Executive Tools")
 col_innov_1, col_innov_2 = st.columns([1, 1])
 
-with col_innov_1:
-    st.info("🎤 **Voice Command Module**")
-    audio_value = st.audio_input("Record strategic instruction")
-    if audio_value and st.button("Process Audio"):
-        with st.spinner("Processing Voice Instruction..."):
-            res = fast_ai_insight(f"User voice input regarding {formatted_stats}")
-            ui.text_card("Voice Analysis Result", res)
+# with col_innov_1:
+#     st.info("🎤 **Voice Command Module**")
+#     audio_value = st.audio_input("Record strategic instruction")
+#     if audio_value and st.button("Process Audio"):
+#         with st.spinner("Processing Voice Instruction..."):
+#             res = fast_ai_insight(f"User voice input regarding {formatted_stats}")
+#             ui.text_card("Voice Analysis Result", res)
 
 with col_innov_2:
     st.info("✉️ **Auto-Emailer**")
