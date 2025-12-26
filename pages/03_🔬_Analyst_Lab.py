@@ -31,7 +31,8 @@ def plotly_png_download(fig, filename):
     )
 
 # --- SETUP & STYLING ---
-st.set_page_config(page_title="Analyst Workbench", layout="wide")
+# st.set_page_config(page_title="Analyst Workbench", layout="wide")
+st.set_page_config(page_title="ORBIT | Analyst", layout="wide", page_icon="favicon.svg")
 ui.setup_styling()
 st.title("🔬 Analyst Workbench")
 
@@ -117,7 +118,7 @@ numeric_cols = df.select_dtypes(include=['number']).columns.tolist()
 with tab1:
     st.markdown("#### Univariate Analysis")
 
-    col1, col2, col3,col4 = st.columns(4)  # Correct way to create 3 columns
+    col1, col2, col3,col4 = st.columns(4)  
     with col1:
         target_col = st.selectbox("Select Column to Analyze", numeric_cols)
 

@@ -1,0 +1,19 @@
+<svg width="400" height="120" viewBox="0 0 400 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="orbitGradient" x1="20" y1="20" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#4F46E5" />
+            <stop offset="100%" stop-color="#EC4899" />
+        </linearGradient>
+        <filter id="glow"><feGaussianBlur stdDeviation="2.5" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    </defs>
+    <style>.title { font-family: sans-serif; font-weight: 800; fill: #1e293b; } .subtitle { font-family: sans-serif; font-weight: 600; fill: #64748b; text-transform: uppercase; }</style>
+    <g transform="translate(20, 10)">
+        <circle cx="50" cy="50" r="14" fill="#1e293b" />
+        <path d="M50 15 C 30 15, 15 35, 15 50 C 15 75, 35 85, 50 85 C 70 85, 85 65, 85 50 C 85 35, 75 25, 65 20" stroke="url(#orbitGradient)" stroke-width="10" stroke-linecap="round" fill="none" filter="url(#glow)" />
+        <circle cx="85" cy="50" r="6" fill="#EC4899" />
+    </g>
+    <g transform="translate(130, 0)">
+        <text x="0" y="62" font-size="52" class="title">ORBIT</text>
+        <!-- <text x="2" y="88" font-size="14" class="subtitle">Intelligence</text> -->
+    </g>
+</svg>

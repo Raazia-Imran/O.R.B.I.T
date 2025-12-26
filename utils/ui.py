@@ -1,12 +1,10 @@
 import streamlit as st
 import time
+import base64
 import requests
 from streamlit_lottie import st_lottie
 
 def load_lottie_url(url: str):
-    """
-    Loads a Lottie animation from a URL.
-    """
     try:
         r = requests.get(url)
         if r.status_code != 200:
@@ -15,125 +13,143 @@ def load_lottie_url(url: str):
     except:
         return None
 
+def render_svg(svg_filename):
+    """Renders the SVG logo in Streamlit Sidebar"""
+    try:
+        with open(svg_filename, "r", encoding="utf-8") as f:
+            svg_content = f.read()
+        b64 = base64.b64encode(svg_content.encode("utf-8")).decode("utf-8")
+        
+        # --- CHANGE 1: Increased Sidebar Logo Width to 280 ---
+        html = f'<img src="data:image/svg+xml;base64,{b64}" width="280" style="margin-bottom: 20px; display: block; margin-left: auto; margin-right: auto;"/>'
+        st.sidebar.markdown(html, unsafe_allow_html=True)
+    except FileNotFoundError:
+        st.sidebar.header("O.R.B.I.T.")
+
 def setup_styling():
     """
-    Injects the 'Prism Intelligence' Design System.
-    Features: Custom Font (Outfit), Skeleton Loaders, Gradient Sidebar.
+    Injects the 'ORBIT' Design System & Logo.
     """
+    # 1. RENDER LOGO IN SIDEBAR
+    render_svg("orbit_logo.svg")
+
+    # 2. GLOBAL CSS
     st.markdown("""
     <style>
-        /* 1. CUSTOM FONT: OUTFIT */
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+        /* Import Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Roboto:wght@300;400;700&display=swap');
         
-        html, body, [class*="css"], font, button, input {
-            font-family: 'Outfit', sans-serif !important; 
-            color: #2d3436;
-        }
+        /* Typography */
+        h1, h2, h3 { font-family: 'Orbitron', sans-serif !important; }
+        html, body, [class*="css"], button, input { font-family: 'Roboto', sans-serif; color: #2d3436; }
         
-        /* 2. SKELETON LOADER ANIMATION (The Shimmer) */
-        @keyframes shimmer {
-            0% { background-position: -1000px 0; }
-            100% { background-position: 1000px 0; }
-        }
-        .skeleton {
-            animation: shimmer 2s infinite linear;
-            background: linear-gradient(to right, #f0f0f0 4%, #e0e0e0 25%, #f0f0f0 36%);
-            background-size: 1000px 100%;
-            border-radius: 12px;
-            margin-bottom: 10px;
-        }
-        .skeleton-text { height: 20px; width: 100%; }
-        .skeleton-card { height: 150px; width: 100%; }
-        .skeleton-title { height: 30px; width: 60%; margin-bottom: 15px; }
-
-        /* 3. SIDEBAR GRADIENT */
+        /* Sidebar Styling */
         [data-testid="stSidebar"] {
             background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
             border-right: 1px solid #dee2e6;
         }
 
-        /* 4. BUTTONS - POPPY & COLORFUL */
+        /* Buttons (Neon Gradient) */
         .stButton > button {
-            background: linear-gradient(45deg, #6c5ce7, #a29bfe);
+            background: linear-gradient(90deg, #0984e3, #6c5ce7);
             color: white !important;
             border: none;
-            border-radius: 12px;
+            border-radius: 8px;
             padding: 0.6rem 1.2rem;
             font-weight: 600;
-            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(108, 92, 231, 0.2);
         }
         .stButton > button:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 0 15px rgba(9, 132, 227, 0.5);
         }
 
-        /* 5. GLASSMORPHISM CARDS */
+        /* Metric Cards */
         div[data-testid="stMetric"] {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 20px;
-            padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+            background: white; border-radius: 15px; padding: 20px;
+            border: 1px solid #dfe6e9;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             transition: transform 0.2s;
         }
         div[data-testid="stMetric"]:hover {
-            transform: translateY(-5px);
-            border-color: #6c5ce7;
+            transform: scale(1.02);
+            border-color: #0984e3;
         }
     </style>
     """, unsafe_allow_html=True)
 
+def splash_screen():
+    """
+    Displays the ORBIT Splash Screen with Fade-In effect.
+    """
+    empty_slot = st.empty()
+    with empty_slot.container():
+        # Load the SVG for the splash screen
+        try:
+            with open("orbit_logo.svg", "r", encoding="utf-8") as f:
+                svg_content = f.read()
+            b64 = base64.b64encode(svg_content.encode("utf-8")).decode("utf-8")
+            
+            # --- CHANGE 2: Increased Splash Logo Width to 500 ---
+            logo_html = f'<img src="data:image/svg+xml;base64,{b64}" width="500" class="fade-in"/>'
+        except:
+            logo_html = "<h1>O.R.B.I.T.</h1>"
+
+        st.markdown(f"""
+        <style>
+        .splash-container {{
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: white;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 99999;
+        }}
+        .fade-in {{ animation: fadeIn 2s ease-in-out; }}
+        @keyframes fadeIn {{ 0% {{ opacity: 0; transform: scale(0.9); }} 100% {{ opacity: 1; transform: scale(1); }} }}
+        </style>
+        
+        <div class="splash-container">
+            {logo_html}
+            <p class="fade-in" style="font-family: 'Orbitron', sans-serif; font-size: 1.5rem; color: #b2bec3; letter-spacing: 3px; margin-top: 30px;">
+                INITIALIZING CORE SYSTEMS...
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+        time.sleep(3.0) 
+    
+    empty_slot.empty()
+
 def render_skeleton_loader():
-    """
-    Renders a fake 'shimmering' UI while AI is thinking.
-    """
     st.markdown("""
-        <div class="skeleton skeleton-title"></div>
-        <div class="skeleton skeleton-text"></div>
-        <div class="skeleton skeleton-text"></div>
-        <div class="skeleton skeleton-text" style="width: 80%;"></div>
+        <div style="height: 20px; width: 60%; background: #e0e0e0; border-radius: 4px; margin-bottom: 10px; animation: pulse 1.5s infinite;"></div>
+        <div style="height: 15px; width: 100%; background: #f0f0f0; border-radius: 4px; margin-bottom: 5px; animation: pulse 1.5s infinite;"></div>
+        <style>@keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }</style>
     """, unsafe_allow_html=True)
 
 def card(title, value, sub_text, icon="📊", help_text=None):
-    """
-    Renders a 'Prism' Metric Card.
-    """
     tooltip_html = f"""<span title="{help_text}" style="cursor: help; color: #a29bfe; font-size: 0.8rem; margin-left: 5px;">(ℹ️)</span>""" if help_text else ""
-
-    html_code = f"""
-    <div style="background: white; border-radius: 20px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #f0f0f0; margin-bottom: 20px; position: relative; overflow: hidden;">
-        <div style="position: absolute; top: -20px; right: -20px; width: 100px; height: 100px; background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%); opacity: 0.1; border-radius: 50%;"></div>
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 1;">
+    st.markdown(f"""
+    <div style="background: white; border-radius: 15px; padding: 24px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #f1f2f6; margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
             <div>
-                <span style="font-size: 0.85rem; font-weight: 600; color: #b2bec3; text-transform: uppercase; letter-spacing: 1px;">
+                <span style="font-size: 0.8rem; font-weight: 700; color: #b2bec3; text-transform: uppercase; letter-spacing: 1px;">
                     {title} {tooltip_html}
                 </span>
-                <div style="font-size: 2.2rem; font-weight: 800; color: #2d3436; margin: 8px 0;">
-                    {value}
-                </div>
-                <div style="font-size: 0.9rem; color: #00b894; font-weight: 600; display: flex; align-items: center; gap: 5px;">
-                    <span>↑</span> {sub_text}
-                </div>
+                <div style="font-size: 2rem; font-weight: 800; color: #2d3436; margin: 5px 0;">{value}</div>
+                <div style="font-size: 0.85rem; color: #0984e3; font-weight: 600;">{sub_text}</div>
             </div>
-            <div style="background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%); color: white; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 8px 16px rgba(108, 92, 231, 0.2);">
-                {icon}
-            </div>
+            <div style="background: #dfe6e9; color: #2d3436; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">{icon}</div>
         </div>
     </div>
-    """
-    st.markdown(html_code, unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
 def text_card(title, content):
-    """
-    Renders a text card with a glowing accent border.
-    """
     st.markdown(f"""
-    <div style="background: white; border-radius: 15px; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border-left: 5px solid #6c5ce7; margin-bottom: 20px;">
+    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-left: 5px solid #00f2ea; margin-bottom: 20px;">
         <h3 style="margin: 0 0 10px 0; font-size: 1.1rem; color: #2d3436; display: flex; align-items: center; gap: 8px;">
-            <span style="font-size: 1.4rem;">✨</span> {title}
+            <span style="font-size: 1.4rem;">🪐</span> {title}
         </h3>
+        <div style="font-family: 'Roboto', sans-serif;">{content}</div>
+    </div>
     """, unsafe_allow_html=True)
-    st.markdown(content)
-    st.markdown("</div>", unsafe_allow_html=True)

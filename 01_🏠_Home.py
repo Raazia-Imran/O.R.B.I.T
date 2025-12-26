@@ -84,46 +84,53 @@
 
 import streamlit as st
 import pandas as pd
-import time
 from utils import ui 
 from streamlit_lottie import st_lottie
 
-# 1. Config
-st.set_page_config(page_title="Prism Intelligence", layout="wide", page_icon="🔮")
+# 1. Config (Tab Title & Icon)
+st.set_page_config(page_title="ORBIT", layout="wide", page_icon="favicon.svg")
+
+# 2. Splash Screen
+# NOTE IMP POINT: Streamlit clears session_state on Browser Refresh. 
+# This means the Splash Screen will naturally show every time you reload the page.
+if "splash_shown" not in st.session_state:
+    ui.splash_screen()
+    st.session_state.splash_shown = True
+
+# 3. Styling & Logo Setup
 ui.setup_styling()
 
-# 2. Hero Section with Lottie
+# 4. Hero Section
 col_text, col_anim = st.columns([1.5, 1], gap="large")
 
 with col_text:
     st.markdown("""
-        <h1 style='font-size: 3.5rem; font-weight: 800; background: -webkit-linear-gradient(45deg, #6c5ce7, #00b894); -webkit-background-clip: text; -webkit-text-fill-color: transparent;'>
-            Prism Intelligence
+        <h1 style='font-size: 4rem; font-weight: 800; background: -webkit-linear-gradient(45deg, #00f2ea, #ff00ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;'>
+            O.R.B.I.T.
         </h1>
-        <p style='font-size: 1.2rem; color: #636e72; line-height: 1.6;'>
-            The <b>Autonomous Enterprise Engine</b>. 
-            Upload raw system logs and watch our AI turn chaos into clear, actionable strategy in seconds.
+        <h3 style='color: #2d3436; margin-top: -15px;'>Operational Reporting & Business Intelligence Tool</h3>
+        <p style='font-size: 1.1rem; color: #636e72; line-height: 1.6; margin-top: 20px;'>
+            <b>Your Enterprise, Aligned.</b><br>
+            Upload raw system logs and watch ORBIT align chaotic data into 
+            clear, strategic trajectories in real-time.
         </p>
     """, unsafe_allow_html=True)
     
-    # Init State
+    # State Management
     if "df" not in st.session_state:
         st.session_state.df = None
-        st.session_state.file_name = None
 
     uploaded_file = st.file_uploader("📂 Upload Enterprise Data (CSV)", type=["csv"])
 
 with col_anim:
-    # Load High-Quality Lottie Animation (AI Brain/Robot)
-    lottie_ai = ui.load_lottie_url("https://assets5.lottiefiles.com/packages/lf20_V9t630.json")
-    if lottie_ai:
-        st_lottie(lottie_ai, height=300, key="ai_anim")
+    lottie_orbit = ui.load_lottie_url("https://assets3.lottiefiles.com/packages/lf20_w51pcehl.json")
+    if lottie_orbit:
+        st_lottie(lottie_orbit, height=350, key="orbit_anim")
     else:
-        st.image("https://cdn-icons-png.flaticon.com/512/2585/2585188.png", width=200)
+        st.image("https://cdn-icons-png.flaticon.com/512/3212/3212567.png", width=200)
 
 st.divider()
 
-# 3. Processing Logic
 if uploaded_file:
     try:
         if uploaded_file.size > 200 * 1024 * 1024:
@@ -133,11 +140,8 @@ if uploaded_file:
             df = pd.read_csv(uploaded_file)
 
         st.session_state.df = df
-        st.session_state.file_name = uploaded_file.name
+        st.success(f"✅ Orbit Established: {len(df):,} records ready for analysis.")
         
-        st.success(f"✅ Data Ingested: {len(df):,} records ready for analysis.")
-        
-        # Navigation Hub
         st.markdown("### 🚀 Launch Module")
         c1, c2, c3 = st.columns(3)
         with c1:

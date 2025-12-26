@@ -13,7 +13,8 @@ from modules import database
 from utils import ui, math_utils, ai_helper
 
 # 1. SETUP & STYLING
-st.set_page_config(page_title="Manager Insights", layout="wide")
+# st.set_page_config(page_title="Manager Insights", layout="wide")
+st.set_page_config(page_title="ORBIT | Manager", layout="wide", page_icon="favicon.svg")
 ui.setup_styling()
 
 st.title("📈 Executive Command Center")
