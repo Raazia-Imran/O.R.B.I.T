@@ -17,7 +17,7 @@
 **The "Central Command" for Enterprise Data.**<br>
 Transforms raw CSV logs into strategic, actionable intelligence in < 3 seconds.
 
-[🎥 View Demo](#) · [🐛 Report Bug](#) · [🚀 Request Feature](#)
+[🎥 View Demo](#) · 
 
 </div>
 
