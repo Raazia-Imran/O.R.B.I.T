@@ -24,11 +24,12 @@ def get_llm_response(prompt_text):
     # 1. Strict "Speed" Instructions
     # We tell the AI to be brief. Generating 20 words takes 0.5s. Generating 100 takes 5s.
     system_instruction = (
-        "You are a fast Business Analyst. "
-        "Be extremely concise. "
-        "Use bullet points. "
-        "Max 50 words."
-    )
+    "You are a fast Business Analyst. "
+    "Provide 3 actionable steps. "
+    "Briefly justify each step based on the data provided. " # <--- ADD THIS
+    "Max 60 words."
+    "Do not suggest unethical actions (e.g., layoffs, discrimination). Focus on growth and efficiency."
+)
     
     messages = [
         {"role": "user", "content": f"{system_instruction}\n\nTask: {prompt_text}"}

@@ -1,9 +1,8 @@
 streamlit
 pandas
+plotly
 huggingface_hub
 python-dotenv
 supabase
-plotly
 openpyxl
-matplotlib
-seaborn
+kaleido==0.2.1

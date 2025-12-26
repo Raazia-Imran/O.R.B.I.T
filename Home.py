@@ -7,8 +7,7 @@ from utils import ui
 st.set_page_config(page_title="Enterprise AI Hub", layout="wide", page_icon="🚀")
 ui.setup_styling()
 
-# 2. Hero Section (Modern Layout)
-# We use a container to center the visual weight
+# 2. Hero Section
 with st.container():
     st.title("Enterprise AI Nexus")
     st.markdown("""
@@ -26,7 +25,6 @@ col_upload, col_status = st.columns([2, 1], gap="large")
 with col_upload:
     st.subheader("📂 Ingest Data")
     
-    # State Management
     if "df" not in st.session_state:
         st.session_state.df = None
         st.session_state.file_name = None
@@ -38,20 +36,19 @@ with col_upload:
         "Upload CSV System Logs", 
         type=["csv"], 
         on_change=reset_state,
-        help="Max file size: 2GB. Larger files will be sampled."
+        help="Optimized for files up to 200MB. Larger files will be auto-sampled."
     )
 
 with col_status:
     st.subheader("🖥️ System Health")
-    # Using the new card design
-    ui.card("AI Engine", "Online", "Model: Qwen-72B / Phi-3", "🟢")
+    ui.card("AI Engine", "Online", "Model: Phi-3 / Qwen", "🟢")
     
 # 4. Processing Logic
 if uploaded_file:
     try:
-        # File Handling Logic
+        # File Handling
         if uploaded_file.size > 200 * 1024 * 1024:
-            st.warning("⚠️ Large file detected. Auto-sampling 10k rows for performance.")
+            st.warning("⚠️ Large file detected. Auto-sampling 10k rows.")
             df = pd.read_csv(uploaded_file, nrows=10000)
         else:
             df = pd.read_csv(uploaded_file)
@@ -59,17 +56,31 @@ if uploaded_file:
         st.session_state.df = df
         st.session_state.file_name = uploaded_file.name
         
-        # Success Animation
         st.success(f"✅ Successfully ingested {len(df):,} records.")
         
-        # Visual Progress Bar
-        progress_text = "Initializing Manager Portal..."
-        my_bar = st.progress(0, text=progress_text)
-        for percent_complete in range(100):
-            time.sleep(0.01)
-            my_bar.progress(percent_complete + 1, text=progress_text)
-        
-        st.info("🚀 Data Ready. Navigate to **Manager Portal** in the sidebar.")
+        # --- NAVIGATION SECTION (FIXED LINKS) ---
+        st.divider()
+        st.markdown("### 🎯 Where would you like to go?")
+
+        col_nav1, col_nav2 = st.columns(2)
+
+        with col_nav1:
+            with st.container(border=True):
+                st.markdown("#### 👔 Manager Portal")
+                st.caption("For Executives & Strategy")
+                st.write("• High-level Revenue Trends")
+                st.write("• AI Strategic Advice")
+                # FIX: Pointing to the NEW filename
+                st.page_link("pages/1_📈_Manager_Portal.py", label="Go to Manager Dashboard", icon="📈")
+
+        with col_nav2:
+            with st.container(border=True):
+                st.markdown("#### 🔬 Analyst Workbench")
+                st.caption("For Data Engineers")
+                st.write("• Data Cleaning Pipeline")
+                st.write("• Statistical Deep Dives")
+                # FIX: Pointing to the NEW filename
+                st.page_link("pages/2_🔬_Analyst_Workbench.py", label="Go to Analyst Workbench", icon="🧪")
 
     except Exception as e:
         st.error(f"Ingestion Error: {e}")
