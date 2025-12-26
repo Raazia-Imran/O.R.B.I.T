@@ -144,6 +144,8 @@ with tab1:
             st.write("") 
             st.write("") 
             st.write("") 
+            st.write("") 
+            st.write("") 
             st.write("**Statistical Summary**")
             st.dataframe(desc, use_container_width=True)
 
