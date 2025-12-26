@@ -6,6 +6,7 @@ import sys
 import os
 import plotly.graph_objects as go
 
+
 # --- CONNECT TO BACKEND ---
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from src.analyzer import DataAnalyzer
@@ -89,7 +90,6 @@ st.markdown("### 🧹 Data Cleaning Pipeline")
 col_clean_action, col_clean_info = st.columns([1, 2])
 
 with col_clean_action:
-    st.info("Run automated cleaning scripts.")
     if st.button("✨ Run Auto-Clean"):
         processor = DataProcessor()
         processor.data = df
@@ -110,21 +110,31 @@ st.divider()
 st.markdown("### 🔍 Deep Dive Analytics")
 
 tab1, tab2, tab3, tab4 = st.tabs(["📊 Distributions", "📈 Relationships", "🚨 Anomalies", "📑 Data Profiling"])
+
 numeric_cols = df.select_dtypes(include=['number']).columns.tolist()
 
 # --- TAB 1: DISTRIBUTIONS ---
 with tab1:
     st.markdown("#### Univariate Analysis")
-    target_col = st.selectbox("Select Column to Analyze", numeric_cols)
+
+    col1, col2, col3,col4 = st.columns(4)  # Correct way to create 3 columns
+    with col1:
+        target_col = st.selectbox("Select Column to Analyze", numeric_cols)
+
     col_chart, col_stats = st.columns([2, 1])
 
     with col_chart:
+
         if target_col and st.button(f"📊 Show {target_col} Distribution"):
             df_sampled = sample_df(df)
             fig = px.histogram(df_sampled, x=target_col, nbins=20, color_discrete_sequence=['#0ea5e9'], title=f"Distribution of {target_col}")
             st.plotly_chart(fig, use_container_width=True)
-            plotly_png_download(fig, f"{target_col}_distribution.png")
-            database.save_log(f"Viewed distribution for {target_col}", "Analyst")
+            
+            col1, col2, col3 = st.columns(3)
+            with col1:  # middle column
+
+                plotly_png_download(fig, f"{target_col}_distribution.png")
+                database.save_log(f"Viewed distribution for {target_col}", "Analyst")
 
     with col_stats:
         if target_col:
@@ -135,9 +145,6 @@ with tab1:
             st.write("") 
             st.write("**Statistical Summary**")
             st.dataframe(desc, use_container_width=True)
-
-# --- TAB 2: RELATIONSHIPS ---
-import plotly.graph_objects as go
 
 # --- TAB 2: RELATIONSHIPS ---
 with tab2:
@@ -179,11 +186,17 @@ with tab2:
 
         # Correlation on sampled data
         corr = df_sampled[x_axis].corr(df_sampled[y_axis])
-        st.info(f"📐 Correlation Coefficient: **{corr:.4f}**")
+        col1, col2, col3 = st.columns(3)
+        with col1:  # middle column
+            st.info(f"📐 Correlation Coefficient: **{corr:.4f}**")
 
-        # PNG download
-        plotly_png_download(fig, f"{x_axis}_vs_{y_axis}.png")
-        database.save_log(f"Generated scatter plot: {x_axis} vs {y_axis}", "Analyst")
+        col1, col2, col3 = st.columns(3)
+        with col1:  # first column
+            # PNG download
+            plotly_png_download(fig, f"{x_axis}_vs_{y_axis}.png")
+            database.save_log(f"Generated scatter plot: {x_axis} vs {y_axis}", "Analyst")
+            database.save_log(f"Downloaded Box Plot", "Analyst")
+
 
 
 # --- TAB 3: ANOMALIES ---
@@ -204,9 +217,17 @@ with tab3:
         q3 = df[y_axis].quantile(0.75)
         iqr = q3 - q1
         outlier_count = df[(df[y_axis] < q1 - 1.5*iqr) | (df[y_axis] > q3 + 1.5*iqr)].shape[0]
-        st.info(f"🚨 Outliers detected: **{outlier_count}**")
-        plotly_png_download(fig, f"{x_axis}_vs_{y_axis}.png")
+        
+        col1, col2, col3 = st.columns(3)
+        with col1:  # middle column
+            st.info(f"🚨 Outliers detected: **{outlier_count}**")
+
+        col1, col2, col3 = st.columns(3)
+        with col1:  # middle column
+            plotly_png_download(fig, f"{x_axis}_vs_{y_axis}.png")
         database.save_log(f"Generated box plot for {y_axis}", "Analyst")
+        database.save_log(f"Downloaded Box Plot", "Analyst")
+
 
 # --- TAB 4: DATA PROFILING ---
 with tab4:
@@ -226,6 +247,10 @@ if len(numeric_cols) > 1:
     corr_matrix = compute_corr_matrix(df, numeric_cols)
     fig_corr = px.imshow(corr_matrix, text_auto=True, color_continuous_scale='RdBu_r', title="Feature Correlation")
     st.plotly_chart(fig_corr, use_container_width=True)
-    plotly_png_download(fig_corr, f"correlation_matrix.png")
+
+    col1, col2, col3, col4, col5 = st.columns(5)
+    with col3:  # middle column
+        plotly_png_download(fig_corr, f"correlation_matrix.png")
+        database.save_log(f"Downloaded Correlation Heatmap", "Analyst")
 else:
     st.warning("Not enough numeric columns for correlation.")

@@ -29,15 +29,29 @@ df_original = st.session_state.df
 st.sidebar.header("🔍 Filter Data")
 
 categorical_cols = df_original.select_dtypes(include=['object']).columns.tolist()
+
 if categorical_cols:
-    filter_col = st.sidebar.selectbox("Filter by Category", ["All Data"] + categorical_cols)
-    
+    filter_col = st.sidebar.selectbox(
+        "Filter by Category",
+        ["All Data"] + categorical_cols
+    )
+
     if filter_col != "All Data":
         unique_vals = df_original[filter_col].unique()
-        selected_val = st.sidebar.selectbox(f"Select {filter_col}", unique_vals)
-        # Apply Filter
+        selected_val = st.sidebar.selectbox(
+            f"Select {filter_col}",
+            unique_vals
+        )
+
+        # Apply filter
         df = df_original[df_original[filter_col] == selected_val]
         st.sidebar.success(f"Active Filter: {len(df)} rows")
+
+        # ✅ LOG ONLY WHEN FILTER IS ACTIVE
+        database.save_log(
+            f"Filter data by {filter_col}: {selected_val}",
+            "Manager"
+        )
     else:
         df = df_original
 else:
@@ -154,20 +168,10 @@ with b_col3:
 st.divider()
 st.markdown("### 🛠️ Advanced Executive Tools")
 
-col_innov_1, col_innov_2 = st.columns([1, 1])
-
-# --- VOICE COMMAND ---
-with col_innov_1:
-    st.info("🎤 **Voice Command Module**")
-    audio_value = st.audio_input("Record strategic instruction")
-    if audio_value:
-        if st.button("Process Audio"):
-            with st.spinner("Processing Voice Instruction..."):
-                res = fast_ai_insight(f"User voice input regarding {formatted_stats}")
-                ui.text_card("Voice Analysis Result", res)
+col_innov_1, col_innov_2, col_innov_3 = st.columns([1, 1, 1])
 
 # --- CEO EMAIL DRAFT (PROMPT) ---
-with col_innov_2:
+with col_innov_1:
     st.info("✉️ **Auto-Emailer**")
     if st.button("Draft CEO Update Email", use_container_width=True):
         # Specific Prompt for Professional Format
@@ -186,6 +190,7 @@ with col_innov_2:
         safe_body = urllib.parse.quote(res)
         st.link_button("🚀 Open in Outlook/Gmail", f"mailto:?subject={safe_subject}&body={safe_body}")
 
+        database.save_log("Draft CEO Email", "Manager")
 
 st.divider()
 st.markdown("### 📥 Export Intelligence")
@@ -195,17 +200,22 @@ download_col1, download_col2, download_col3 = st.columns(3)
 # 1. DOWNLOAD CSV (Raw Data)
 with download_col1:
     csv = df.to_csv(index=False).encode('utf-8')
-    st.download_button(
+
+    if st.download_button(
         label="📄 Download Data (CSV)",
         data=csv,
         file_name="executive_data.csv",
         mime="text/csv",
         use_container_width=True
-    )
+    ):
+        database.save_log("Download Executive Data CSV", "Manager")
 
 # 2. DOWNLOAD REPORT (Text/Markdown)
 # generate a professional text report based on the current stats
-report_content = f"""
+with download_col2:
+    if st.download_button(
+        label="📑 Download Report (TXT)",
+        data=f"""
 EXECUTIVE INTELLIGENCE REPORT
 Generated via AI Nexus
 ------------------------------------------------
@@ -219,15 +229,12 @@ KEY METRICS:
 ------------------------------------------------
 STRATEGIC SUMMARY:
 (See Dashboard for AI generated insights)
-"""
-with download_col2:
-    st.download_button(
-        label="📑 Download Report (TXT)",
-        data=report_content,
+""",
         file_name="Executive_Summary.txt",
         mime="text/plain",
         use_container_width=True
-    )
+    ):
+        database.save_log("Download Executive Report", "Manager")
 
 # 3. PDF / EXCEL NOTICE
 with download_col3:
@@ -236,3 +243,4 @@ with download_col3:
     if st.button("🖨️ Print to PDF", use_container_width=True):
         st.toast("Press Ctrl+P (Cmd+P) and select 'Save as PDF'", icon="🖨️")
         st.balloons()
+        database.save_log("Print to PDF", "Manager")
