@@ -37,7 +37,7 @@ ORBIT is not just a dashboard; it is a **Role-Based Intelligence Hub** that rout
 | Portal | User Persona | Key Capabilities | Visual Vibe |
 | :--- | :--- | :--- | :--- |
 | **01_🏠 Home** | All Users | • **Smart Ingestion:** Auto-samples >200MB files.<br>• **Lottie Animations:** Interactive Sci-Fi Hero.<br>• **Splash Screen:** Cinematic "Boot Sequence." | 🪐 Galactic |
-| **02_📈 Manager** | Executives | • **3-Click AI:** Trends, Anomalies, Actions.<br>• **Voice Command:** Speak to control data.<br>• **Auto-Emailer:** Drafts professional reports. | 💼 Strategic |
+| **02_📈 Manager** | Executives | • **3-Click AI:** Trends, Anomalies, Actions.<br>• • **Auto-Emailer:** Drafts professional reports. | 💼 Strategic |
 | **03_🔬 Analyst** | Data Engineers | • **One-Click Clean:** Removes duplicates/nulls.<br>• **Deep Dive:** Correlation Heatmaps.<br>• **Export:** Download cleaned datasets. | 🧪 Technical |
 | **04_📜 Audit** | Compliance | • **Immutable Logs:** Tracks every AI action.<br>• **Live Stats:** Real-time user activity counter.<br>• **Search:** Filter logs by role or action. | 🛡️ Secure |
 
