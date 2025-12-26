@@ -138,7 +138,7 @@ ORBIT/
 
 **Built for the Future of Work.**
 
-Created with ❤️ by Raazia Imran Reshamwala, Aiza Samad, Waheeba Khan
+Created with ❤️ by Raazia Imran Reshamwala, Aiza Samad Khan, Waheeba Khan
 
 </div>
 
